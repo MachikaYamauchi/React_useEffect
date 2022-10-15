@@ -11,18 +11,36 @@ const Login = (props) => {
   const [passwordIsValid, setPasswordIsValid] = useState();
   const [formIsValid, setFormIsValid] = useState(false);
 
+  // useEffect shiould be executed in response to something. And the something could be the component being loaded. It could be the email address being updated.
   useEffect(()=> {
-    setFormIsValid(
-      enteredEmail.includes('@') && enteredPassword.trim().length > 6
-    );
+    const identifier = setTimeout(()=> {
+      console.log("Form validation here!");
+      setFormIsValid(
+        enteredEmail.includes('@') && enteredPassword.trim().length > 6
+      );
+    }, 500);
+
+    // Clean up function runs before every side effect function execution and before the component removed. And it does not run before the first side effect function execution.
+    return () => {
+      console.log("Clean up!");
+      // clearTimeout is default JavaScript function.
+      clearTimeout(identifier);
+    };
+
   }, [enteredEmail, enteredPassword])
 
   const emailChangeHandler = (event) => {
     setEnteredEmail(event.target.value);
+    // setFormIsValid(
+    //   event.target.value.includes('@') && enteredPassword.trim().length > 6
+    // );
   };
 
   const passwordChangeHandler = (event) => {
     setEnteredPassword(event.target.value);
+    // setFormIsValid(
+    //   enteredEmail.includes('@') && event.target.value.trim().length > 6
+    // );
   };
 
   const validateEmailHandler = () => {
